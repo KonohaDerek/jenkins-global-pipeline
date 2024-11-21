@@ -1,0 +1,32 @@
+env.buildColor = ''
+env.sonarQubeUrl = 'https://sonarqube-demo.example.com'
+env.targetUrl = 'https://demo.example.com'
+env.namespace='DevOps'
+env.project = 'Jenkins Global pipeline'
+env.GIT_BRANCH = "${env.gitlabTargetBranch? env.gitlabTargetBranch: 'master'}"
+env.GIT_URL = 'gitlab.howdesign.com.tw/devops/jenkins-global-pipeline.git'
+env.VERSION_TAG = "0.0.${BUILD_NUMBER}-beta"
+env.IMAGE_TAG = 'testing'
+env.IMAGE_NAME = 'image/jenkins-global-pipeline'
+env.credentialsId = 'bss_jenkins_gitlab_access'
+
+node {
+  try {
+    start()
+    pipeline()
+    success()
+    version() 
+  } catch (e) {
+    failure(e)
+    throw(e)
+  }
+}
+
+def pipeline() {
+  stage('ENV') {
+    sh 'env'
+  }
+  stage('Error') {
+    //   throw new Exception("Throw to stop pipeline")
+  }
+}
