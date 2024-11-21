@@ -10,3 +10,4 @@
 5. Run the pipeline job
 6. Check the pipeline job output
 
+[](./docs/images/GlobalPipelineLibraries.png)
