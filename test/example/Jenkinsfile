@@ -17,7 +17,7 @@ node {
     success()
     version() 
   } catch (e) {
-    failure(e)
+    failureWithAI(e)
     throw(e)
   }
 }
