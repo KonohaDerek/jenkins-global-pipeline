@@ -17,7 +17,8 @@ node {
     success()
     version() 
   } catch (e) {
-    failureWithAI(e)
+    println "Error: ${e}"
+    // failureWithAI(e)
     throw(e)
   }
 }
@@ -26,7 +27,8 @@ def pipeline() {
   stage('ENV') {
     sh 'env'
   }
-  stage('Error') {
-    //   throw new Exception("Throw to stop pipeline")
+  stage('Build Error') {
+      clientImage = docker.build("demo", ".")
+      println "clientImage: ${clientImage}"
   }
 }
