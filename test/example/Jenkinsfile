@@ -38,7 +38,7 @@ def pipeline() {
         ]) {
             echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
             sleep 10
-            def error = ""
+            def errorLog = ""
             // 读取控制台日志到变量中
             def consoleLog = sh(
                 script: "curl --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
