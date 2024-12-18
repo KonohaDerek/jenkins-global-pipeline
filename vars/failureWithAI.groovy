@@ -3,7 +3,7 @@ def call(Exception e) {
     currentBuild.result = "FAILED"
     env.buildColor = 'danger'
     def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
-    :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning:"""
+    :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning: """
     def aiResponse = """ ``` ${getAssistantResponse(e.toString())} ``` """
     // get the error trace
     def err = """ ``` ${e.toString()}``` """
@@ -13,7 +13,7 @@ def call(Exception e) {
     def user = slackUser(isDevOps)
     def attachments = [
       [
-        text: message + user + aiResponse + err, 
+        text: message + '\n' + user + '\n' + aiResponse + err, 
         fallback: 'Fallback',
         color: "${env.buildColor}"
       ]
