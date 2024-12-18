@@ -18,6 +18,10 @@ node {
     version() 
   } catch (e) {
     println "Error: ${e}"
+    println "Error message: ${e.message}"
+    // Get Jenkiins log
+    def log = currentBuild.rawBuild.getLog(1000)
+    println "Log: ${log}"
     // failureWithAI(e)
     throw(e)
   }
