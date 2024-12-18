@@ -24,13 +24,13 @@ def call(Boolean isDevOps = false) {
     ]
 
     // 檢查 username 是否存在於 Map 中
-    if (myMap.containsKey(username)) {
-        def value = myMap[username]
+    if (userMap.containsKey(username)) {
+        def value = userMap[username]
         println "Value for ${username}: ${value}"
         return value
     } else {
          println "Username ${username} not found in the map."
         // 如果沒有找到，則回傳預設值
-        return myMap[ 'derek']
+        return userMap[ 'derek']
     }
 }
