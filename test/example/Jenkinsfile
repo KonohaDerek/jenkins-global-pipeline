@@ -37,7 +37,25 @@ def pipeline() {
     sh 'env'
   }
   stage('Build Error') {
+    try{
       clientImage = docker.build("demo", ".")
       println "clientImage: ${clientImage}"
+    } catch (e) {
+      echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
+
+        // 擷取詳細的錯誤資訊
+        def errorLog = sh(
+            script: """
+            docker build -t demo . || true
+            """,
+            returnStdout: true
+        ).trim()
+
+        error """Docker 建置失敗：
+        錯誤資訊：
+        ${errorLog}
+        """
+        throw new Exception(errorLog)
+    }
   }
 }
