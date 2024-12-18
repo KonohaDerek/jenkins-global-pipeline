@@ -12,21 +12,13 @@ env.credentialsId = 'bss_jenkins_gitlab_access'
 
 node {
   try {
-    start()
+    // start()
     pipeline()
-    success()
-    version() 
+    // success()
+    // version() 
   } catch (e) {
     println "Error: ${e}"
     println "Error message: ${e.message}"
-    // Get docker log
-   def containerLogs = sh(
-        script: """
-        docker logs \$(docker ps -aq --filter 'status=exited' | head -1)
-        """,
-        returnStdout: true
-    ).trim()
-    println "Log: ${containerLogs}"
     // failureWithAI(e)
     throw(e)
   }
@@ -38,7 +30,7 @@ def pipeline() {
   }
   stage('Build Error') {
     try{
-      clientImage = docker.build("demo", ".")
+      clientImage = docker.build("demo", ".") >> a.txt
       println "clientImage: ${clientImage}"
     } catch (e) {
       echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
@@ -50,6 +42,8 @@ def pipeline() {
             """,
             returnStdout: true
         ).trim()
+
+        sh "cat a.txt"
 
         error """Docker 建置失敗：
         錯誤資訊：
