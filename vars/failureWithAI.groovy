@@ -1,24 +1,26 @@
 def call(Exception e) {
-  currentBuild.result = "FAILED"
-  env.buildColor = 'danger'
-   def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
-  :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning:"""
-  def aiResponse = """ ``` ${getAssistantResponse(e.toString())} ``` """
-  // get the error trace
-  def err = """ ``` ${e.toString()}``` """
+  stage('Notify Failure') {
+    currentBuild.result = "FAILED"
+    env.buildColor = 'danger'
+    def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
+    :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning:"""
+    def aiResponse = """ ``` ${getAssistantResponse(e.toString())} ``` """
+    // get the error trace
+    def err = """ ``` ${e.toString()}``` """
 
-  // send the message to slack
-  def isDevOps = aiResponse.contains("DevOps 處理")
-  def user = slackUser(isDevOps)
-  def attachments = [
-    [
-      text: message + user + aiResponse + err, 
-      fallback: 'Fallback',
-      color: "${env.buildColor}"
+    // send the message to slack
+    def isDevOps = aiResponse.contains("DevOps 處理")
+    def user = slackUser(isDevOps)
+    def attachments = [
+      [
+        text: message + user + aiResponse + err, 
+        fallback: 'Fallback',
+        color: "${env.buildColor}"
+      ]
     ]
-  ]
 
- slackSend(channel: 'devops', color: "${env.buildColor}", attachments: attachments)
+  slackSend(channel: 'devops', color: "${env.buildColor}", attachments: attachments)
+  }
 }
 
 def getAssistantResponse(err) {
