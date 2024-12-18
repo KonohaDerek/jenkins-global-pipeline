@@ -37,6 +37,7 @@ def pipeline() {
             usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
         ]) {
              echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
+             sleep 5
             // 擷取詳細的錯誤資訊
             def errorLog = sh(
                 script: """
