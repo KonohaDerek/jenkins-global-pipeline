@@ -33,21 +33,26 @@ def pipeline() {
       clientImage = docker.build("demo", ".") >> a.txt
       println "clientImage: ${clientImage}"
     } catch (e) {
-      echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
+        withCredentials([
+            usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
+        ]) {
+        echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
 
-        // 擷取詳細的錯誤資訊
-        def errorLog = sh(
-            script: """
-            curl -s -X GET "${env.BUILD_URL}/consoleText" 
-            """,
-            returnStdout: true
-        ).trim()
+            // 擷取詳細的錯誤資訊
+            def errorLog = sh(
+                script: """
+                curl -s -X GET "${env.BUILD_URL}/consoleText \
+                --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN}" 
+                """,
+                returnStdout: true
+            ).trim()
 
-        error """Docker 建置失敗：
-        錯誤資訊：
-        ${errorLog}
-        """
-        throw new Exception(errorLog)
+            error """Docker 建置失敗：
+            錯誤資訊：
+            ${errorLog}
+            """
+            throw new Exception(errorLog)
+         }
     }
   }
 }
