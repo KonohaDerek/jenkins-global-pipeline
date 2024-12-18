@@ -19,9 +19,14 @@ node {
   } catch (e) {
     println "Error: ${e}"
     println "Error message: ${e.message}"
-    // Get Jenkiins log
-    def log = currentBuild.rawBuild.getLog(1000)
-    println "Log: ${log}"
+    // Get docker log
+   def containerLogs = sh(
+        script: """
+        docker logs \$(docker ps -aq --filter 'status=exited' | head -1)
+        """,
+        returnStdout: true
+    ).trim()
+    println "Log: ${containerLogs}"
     // failureWithAI(e)
     throw(e)
   }
