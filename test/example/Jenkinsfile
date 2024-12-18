@@ -36,16 +36,20 @@ def pipeline() {
         withCredentials([
             usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
         ]) {
-             echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
-             sleep 10
-            // 擷取詳細的錯誤資訊
-            def errorLog = sh(
-                script: """
-                echo "${env.BUILD_URL}consoleText --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN}" >> a.txt
-                curl "${env.BUILD_URL}consoleText --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN}" 
-                """,
+            echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
+            sleep 10
+            def error = ""
+            // 读取控制台日志到变量中
+            def consoleLog = sh(
+                script: "curl --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
                 returnStdout: true
             ).trim()
+            
+            // 输出日志内容到控制台
+            echo "Console Log Content: ${consoleLog}"
+
+            // 这里可以进一步处理 consoleLog，或者将其存储到文件
+            writeFile file: 'console.log', text: consoleLog // 如果想将内容写入文件
 
             error """Docker 建置失敗：
             錯誤資訊：
