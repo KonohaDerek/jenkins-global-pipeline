@@ -39,17 +39,28 @@ def pipeline() {
             echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
             sleep 10
             def errorLog = ""
-            // 读取控制台日志到变量中
+            // 讀取控製臺日誌到變數中
             def consoleLog = sh(
-                script: "curl --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
+                script: "curl -s --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
                 returnStdout: true
             ).trim()
             
-            // 输出日志内容到控制台
-            echo "Console Log Content: ${consoleLog}"
+           // 定義正則錶達式來匹配從 'docker build' 到 '[Pipeline] }' 的內容
+            def pattern = ~/docker build.*?$Pipeline$\s+\}/s // 使用 's' 修飾符以匹配跨行內容
+            def matcher = (consoleLog =~ pattern)
 
-            // 这里可以进一步处理 consoleLog，或者将其存储到文件
-            writeFile file: 'console.log', text: consoleLog // 如果想将内容写入文件
+            // 檢查是否找到了匹配項
+            if (matcher) {
+                def extractedLog = matcher[0] // 獲取第一個匹配的結果
+                echo "Extracted Log Content: ${extractedLog}"
+                // 如果需要，可以將提取的內容寫入文件
+                writeFile file: 'extracted_console.log', text: extractedLog
+            } else {
+                echo "No matching content found between 'docker build' and '[Pipeline] }'."
+            }
+
+            // 這裏可以進一步處理 consoleLog，或者將其存儲到文件
+            writeFile file: 'console.log', text: consoleLog // 如果想將內容寫入文件
 
             error """Docker 建置失敗：
             錯誤資訊：
