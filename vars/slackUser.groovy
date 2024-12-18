@@ -1,8 +1,15 @@
 def call(Boolean isDevOps = false) {
-   def username = env.gitlabUserUsername || env.BUILD_USER_ID || 'derek'
+   def username 
    if (isDevOps) {
        username = 'derek.chen'
-   }
+    } else if (env.gitlabUserUsername) {
+        username = env.gitlabUserUsername
+    } else if (env.BUILD_USER_ID) {
+        username = env.BUILD_USER_ID
+    } else {
+        username = 'derek'
+    }
+   
    def userMap = [
         // other
         'phantom': '<@U01D2CKSPCK>',
