@@ -12,6 +12,7 @@ def call(Boolean isDevOps = false) {
         'derek.chen': '<@U06MHPF6VCN>', // gitlab
         // RD
         'mandy': '<@U01DESVR19P>', // jenkins
+        'rocbird.hsieh', '<@U06N32QAKK3>', // gitlab
         'naremloa': '<@U02B2N35Y2J>', // jenkins
         'jeeying': '<@U01QG8K4K1Q>',// jenkins
         'jeeying.chen': '<@U01QG8K4K1Q>', // gitlab

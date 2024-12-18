@@ -18,8 +18,7 @@ def call(Exception e) {
         color: "${env.buildColor}"
       ]
     ]
-
-  slackSend(channel: 'devops', color: "${env.buildColor}", attachments: attachments)
+    slackSend(channel: 'deployment-notifications', color: "${env.buildColor}", attachments: attachments)
   }
 }
 
