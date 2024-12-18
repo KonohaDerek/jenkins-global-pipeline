@@ -46,7 +46,7 @@ def pipeline() {
             ).trim()
             
            // 定義正則錶達式來匹配從 'docker build' 到 '[Pipeline] }' 的內容
-            def pattern = ~/docker build.*?$Pipeline$\s+\}/s // 使用 's' 修飾符以匹配跨行內容
+            def pattern =  def pattern = ~/docker build(.*?)$Pipeline$\s+\}/ // 使用 's' 修飾符以匹配跨行內容
             def matcher = (consoleLog =~ pattern)
 
             // 檢查是否找到了匹配項
