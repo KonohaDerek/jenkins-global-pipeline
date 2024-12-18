@@ -1,13 +1,15 @@
 def call(Exception e) {
   stage('Notify Failure') {
+    println "error message: ${e.message}"
+    
     currentBuild.result = "FAILED"
     env.buildColor = 'danger'
     def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
     :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning: """
-    def aiResponse = """ ``` ${getAssistantResponse(e.toString())} ``` """
+    def aiResponse = """ ``` ${getAssistantResponse(e.message)} ``` """
     // get the error trace
-    def err = """ ``` ${e.toString()}``` """
-
+    def err = """ ``` ${e.message}``` """
+   
     // send the message to slack
     def isDevOps = aiResponse.contains("DevOps 處理")
     def user = slackUser(isDevOps)
