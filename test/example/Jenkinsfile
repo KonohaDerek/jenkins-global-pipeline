@@ -17,6 +17,8 @@ node {
     // success()
     // version() 
   } catch (e) {
+    // Get The JenkinsLog
+    getJenkinsLog()
     println "Error: ${e}"
     println "Error message: ${e.message}"
     // failureWithAI(e)
@@ -30,44 +32,38 @@ def pipeline() {
   }
   stage('Build Error') {
     try{
+      println "[BUILD]"
       clientImage = docker.build("demo", ".") >> a.txt
       println "clientImage: ${clientImage}"
     } catch (e) {
-        withCredentials([
+      println "[BUILD_ERROR]"
+    }
+  }
+}
+
+def getJenkinsLog() {
+  stage('Get Jenkins Log') {
+     withCredentials([
             usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
         ]) {
             echo "Docker 映像檔建置失敗，嘗試擷取錯誤資訊..."
             sleep 10
             def errorLog = ""
-            // 讀取控製臺日誌到變數中
+            // 读取控制台日志到变量中
             def consoleLog = sh(
                 script: "curl -s --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
                 returnStdout: true
             ).trim()
             
-           // 定義正則錶達式來匹配從 'docker build' 到 '[Pipeline] }' 的內容
-            def pattern =  ~/docker build(.*?)$Pipeline$\s+\}/ // 使用 's' 修飾符以匹配跨行內容
-            def matcher = (consoleLog =~ pattern)
-
-            // 檢查是否找到了匹配項
-            if (matcher) {
-                def extractedLog = matcher[0] // 獲取第一個匹配的結果
-                echo "Extracted Log Content: ${extractedLog}"
-                // 如果需要，可以將提取的內容寫入文件
-                writeFile file: 'extracted_console.log', text: extractedLog
-            } else {
-                echo "No matching content found between 'docker build' and '[Pipeline] }'."
+            if (consoleLog.contains("[BUILD_ERROR]")) {
+                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]"))
             }
-
-            // 這裏可以進一步處理 consoleLog，或者將其存儲到文件
-            writeFile file: 'console.log', text: consoleLog // 如果想將內容寫入文件
 
             error """Docker 建置失敗：
             錯誤資訊：
             ${errorLog}
             """
             throw new Exception(errorLog)
-         }
     }
   }
 }
