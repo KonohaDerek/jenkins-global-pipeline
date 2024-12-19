@@ -53,7 +53,7 @@ def getJenkinsLog() {
             ).trim()
             
             if (consoleLog.contains("[BUILD_ERROR]")) {
-                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]"))
+                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]")).trim().replaceAll('\[.*\]', '').replaceAll('\n', ',')
             }
 
             println "errorLog : ${errorLog}"
