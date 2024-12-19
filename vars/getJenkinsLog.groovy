@@ -13,7 +13,7 @@ def call(){
             
             if (consoleLog.contains("[BUILD_ERROR]")) {
                 consoleLog = consoleLog.substring(consoleLog.indexOf("[BUILD]")+7, consoleLog.indexOf("[BUILD_ERROR]"))
-                errorLog = consoleLog.substring(consoleLog.indexOf("docker build"), consoleLog.indexOf("[Pipeline] }")).replace("\n", "").replace("\r", "").trim()
+                errorLog = consoleLog.substring(consoleLog.indexOf("docker build"), consoleLog.indexOf("[Pipeline] }")).replace('\n', ',').replace('\r', '').trim()
             }
 
             println "errorLog : ${errorLog}"
