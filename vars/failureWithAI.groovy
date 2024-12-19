@@ -1,16 +1,16 @@
 def call(Exception e) {
   stage('Notify Failure') { 
     errorLog = getJenkinsLog()
-    if (errorLog != "") {
-      e.message = errorLog
+    if (!errorLog) {
+      errorLog = e.message
     }
     currentBuild.result = "FAILED"
     env.buildColor = 'danger'
     def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
     :warning: :warning: :warning: ${namespace} admin ${env.GIT_BRANCH} branch :warning: :warning: :warning: """
-    def aiResponse = """ ``` ${getAssistantResponse(e.message)} ``` """
+    def aiResponse = """ ``` ${getAssistantResponse(errorLog)} ``` """
     // get the error trace
-    def err = """ ``` ${e.message}``` """
+    def err = """ ``` ${errorLog}``` """
    
     // send the message to slack
     def isDevOps = aiResponse.contains("DevOps 處理")
