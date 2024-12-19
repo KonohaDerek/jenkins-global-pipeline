@@ -18,10 +18,12 @@ node {
     // version() 
   } catch (e) {
     // Get The JenkinsLog
-    getJenkinsLog()
-    println "Error: ${e}"
-    println "Error message: ${e.message}"
-    // failureWithAI(e)
+    try{
+      getJenkinsLog()
+    } catch (ex) {
+      println "Error: ${ex}"
+      println "Error message: ${ex.message}"
+    }
     throw(e)
   }
 }
@@ -37,6 +39,7 @@ def pipeline() {
       println "clientImage: ${clientImage}"
     } catch (e) {
       println "[BUILD_ERROR]"
+      throw e
     }
   }
 }
