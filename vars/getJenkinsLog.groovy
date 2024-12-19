@@ -3,18 +3,6 @@ def call(){
      withCredentials([
             usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
         ]) {
-            def replaceMap = [
-                '[BUILD]': '',
-                '[BUILD_ERROR]': '',
-                '[Pipeline] isUnix': '',
-                '[Pipeline] sh': '',
-                '[Pipeline] withEnv': '',
-                '[Pipeline] echo': '',
-                '[Pipeline] stage': '',
-                '[Pipeline] }': '',
-                '\n': ',',
-                '\r': '',
-            ]
             sleep 5
             def errorLog = ""
             // 读取控制台日志到变量中
@@ -25,7 +13,7 @@ def call(){
             
             if (consoleLog.contains("[BUILD_ERROR]")) {
                 consoleLog = consoleLog.substring(consoleLog.indexOf("[BUILD]")+7, consoleLog.indexOf("[BUILD_ERROR]"))
-                errorLog = consoleLog.substring(consoleLog.indexOf("docker build"), consoleLog.indexOf("[Pipeline] }")).replaceAll(replaceMap)
+                errorLog = consoleLog.substring(consoleLog.indexOf("docker build"), consoleLog.indexOf("[Pipeline] }")).replace("\n", "").replace("\r", "").trim()
             }
 
             println "errorLog : ${errorLog}"
