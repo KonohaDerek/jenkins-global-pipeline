@@ -17,9 +17,9 @@ node {
     // success()
     // version() 
   } catch (e) {
-     getJenkinsLog()
+     //getJenkinsLog()
     // Get The JenkinsLog
-     //failureWithAI()
+     failureWithAI()
     throw(e)
   }
 }
