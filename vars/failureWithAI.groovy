@@ -42,7 +42,6 @@ def getAssistantResponse(err) {
     }
 }
 
-
 def getJenkinsLog() {
   stage('Get Jenkins Log') {
      withCredentials([
@@ -57,8 +56,10 @@ def getJenkinsLog() {
             ).trim()
             
             if (consoleLog.contains("[BUILD_ERROR]")) {
-                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]"))
+                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]")).replaceAll('\n', ',').trim()
             }
+
+            println "errorLog : ${errorLog}"
            return errorLog
     }
   }
