@@ -1,7 +1,9 @@
 def call(Exception e) {
-  stage('Notify Failure') {
-    println "error message: ${e.message}"
-    
+  stage('Notify Failure') { 
+    errorLog = getJenkinsLog()
+    if (errorLog != "") {
+      e.message = errorLog
+    }
     currentBuild.result = "FAILED"
     env.buildColor = 'danger'
     def message = """${env.namespace} ${env.project} ${env.GIT_BRANCH} Environment - BUILD ${currentBuild.result} after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}|Open>)
@@ -38,4 +40,26 @@ def getAssistantResponse(err) {
         msg = sh(script: dockerCommand, returnStdout: true)
         return msg
     }
+}
+
+
+def getJenkinsLog() {
+  stage('Get Jenkins Log') {
+     withCredentials([
+            usernamePassword(credentialsId: 'jenkins-console-pat', usernameVariable: 'JENKINS_CONSOLE_USER', passwordVariable: 'JENKINS_CONSOLE_TOKEN')
+        ]) {
+            sleep 10
+            def errorLog = ""
+            // 读取控制台日志到变量中
+            def consoleLog = sh(
+                script: "curl -s --user ${JENKINS_CONSOLE_USER}:${JENKINS_CONSOLE_TOKEN} ${env.BUILD_URL}consoleText",
+                returnStdout: true
+            ).trim()
+            
+            if (consoleLog.contains("[BUILD_ERROR]")) {
+                errorLog = consoleLog.substring(consoleLog.indexOf("[BUILD]"), consoleLog.indexOf("[BUILD_ERROR]"))
+            }
+           return errorLog
+    }
+  }
 }
