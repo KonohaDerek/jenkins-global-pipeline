@@ -35,7 +35,7 @@ def getAssistantResponse(err) {
  -e AZURE_OPENAI_API_KEY="${API_KEY}"  \
  -e AZURE_OPENAI_ASSISTANT_ID="${ASSISTANT_ID}"  \
  -e AZURE_OPENAI_MODEL="gpt-4o-mini" \
- -e AZURE_OPENAI_API_VERSION="2024-07-01-preview" "asia-east1-docker.pkg.dev/howgroup-devops-2021/devops/jenkins-assistant-nest:1.0.3" -e ${err}
+ -e AZURE_OPENAI_API_VERSION="2024-07-01-preview" "asia-east1-docker.pkg.dev/howgroup-devops-2021/devops/jenkins-assistant-nest:1.0.3" -e "${err}"
        """
         def msg = ""
         msg = sh(script: dockerCommand, returnStdout: true)
