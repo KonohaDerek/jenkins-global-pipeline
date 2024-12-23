@@ -28,12 +28,12 @@ def call(Exception e) {
 
 def getAssistantResponse(err) {
       withCredentials([
-        string(credentialsId: 'AZURE_OPENAI_API_KEY', variable: 'AZURE_OPENAI_API_KEY'),
-        string(credentialsId: 'AZURE_OPENAI_ASSISTANT_ID', variable: 'AZURE_OPENAI_ASSISTANT_ID')]) {
+        string(credentialsId: 'AZURE_OPENAI_API_KEY', variable: 'API_KEY'),
+        string(credentialsId: 'AZURE_OPENAI_ASSISTANT_ID', variable: 'ASSISTANT_ID')]) {
         def dockerCommand = """
        docker run --rm -e NODE_ENV=production -e AZURE_OPENAI_ENDPOINT="https://howdigital-openai-us.openai.azure.com"  \
- -e AZURE_OPENAI_API_KEY="${AZURE_OPENAI_API_KEY}"  \
- -e AZURE_OPENAI_ASSISTANT_ID="${AZURE_OPENAI_ASSISTANT_ID}"  \
+ -e AZURE_OPENAI_API_KEY="${API_KEY}"  \
+ -e AZURE_OPENAI_ASSISTANT_ID="${ASSISTANT_ID}"  \
  -e AZURE_OPENAI_MODEL="gpt-4o-mini" \
  -e AZURE_OPENAI_API_VERSION="2024-07-01-preview" "asia-east1-docker.pkg.dev/howgroup-devops-2021/devops/jenkins-assistant-nest:1.0.3" -e ${err}
        """
