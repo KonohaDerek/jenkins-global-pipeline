@@ -29,6 +29,7 @@ def call(Boolean isDevOps = false) {
         'bill.cheng': '<@U04US7Y3K44>', // gitlab
         'aura.huang': '<@U062FUSQKUN>', // gitlab
         'ellen': '<@U03U59J1SRF>', // gitlab
+        'paxton.tao': '<@U08FU3Q0H4K>' // gitlab
     ]
 
     // 檢查 username 是否存在於 Map 中
