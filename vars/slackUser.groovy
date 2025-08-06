@@ -26,10 +26,10 @@ def call(Boolean isDevOps = false) {
         'gene.ke': '<@U04GGLDFPQQ>', // gitlab
         'ray':'<@U02NFKVMVAP>', // jenkins
         'ray.tsai': '<@U02NFKVMVAP>', // gitlab
-        'bill.cheng': '<@U04US7Y3K44>', // gitlab
         'aura.huang': '<@U062FUSQKUN>', // gitlab
         'ellen': '<@U03U59J1SRF>', // gitlab
         'paxton.tao': '<@U08FU3Q0H4K>' // gitlab
+        'amelie.kuo': '<@U094CRSPN8P>' // gitlab
     ]
 
     // 檢查 username 是否存在於 Map 中
