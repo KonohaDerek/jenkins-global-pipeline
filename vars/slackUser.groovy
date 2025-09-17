@@ -28,7 +28,7 @@ def call(Boolean isDevOps = false) {
         'ray.tsai': '<@U02NFKVMVAP>', // gitlab
         'aura.huang': '<@U062FUSQKUN>', // gitlab
         'ellen': '<@U03U59J1SRF>', // gitlab
-        'paxton.tao': '<@U08FU3Q0H4K>' // gitlab
+        'paxton.tao': '<@U08FU3Q0H4K>', // gitlab
         'amelie.kuo': '<@U094CRSPN8P>' // gitlab
     ]
 
